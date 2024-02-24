@@ -7,15 +7,7 @@ This repository contains a simple TodoList app for WOW AI test. This app use Rea
 
 The source code of app in **/src/pages/index.js**
 
-## Running Docker
-
-First, run the development server:
-
-```bash
-docker compose up -d --build
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**You can choose one in two below ways to run app**
 
 ## Running on Localhost
 
@@ -29,6 +21,14 @@ Then, run the development server:
 
 ```bash
 npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Running Docker
+
+```bash
+docker compose up -d --build
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

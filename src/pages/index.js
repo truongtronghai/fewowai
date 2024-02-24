@@ -10,6 +10,7 @@ export default function Home() {
   const inputTitle = useRef(null)
   const inputDesc = useRef(null)
   const [isDisabled, setIsDisabled] = useState(true)
+  const [whatIsChecked, setWhatIsChecked] = useState(1)
 
   useEffect(() => {
     const dataTodoList = localStorage.getItem("todos")
@@ -103,6 +104,7 @@ export default function Home() {
         inputTitle.current.value = ""
         inputDesc.current.value = ""
         setIsDisabled(true)
+        setWhatIsChecked(1)
       })
   }
   const handleEditItem = (todoId) => {
@@ -137,6 +139,7 @@ export default function Home() {
     const tmpArr = [...cache]
     const i = tmpArr.findIndex((e) => e.id == todoId)
     tmpArr[i].completed = !tmpArr[i].completed
+    updateTodoList(tmpArr)
     setCache(tmpArr)
   }
 
@@ -149,6 +152,28 @@ export default function Home() {
       ev.target.classList.remove("border-[#ff0000]")
     }
   }
+
+  const handleFilter = (ev) => {
+    const choices = {
+      all: 1,
+      completed: 2,
+      pending: 3
+    }
+    setWhatIsChecked(choices[ev.target.value])
+
+    const tmpArr = cache.filter((e) => {
+      switch (ev.target.value) {
+        case "all":
+          return true
+        case "completed":
+          return e.completed === true
+        case "pending":
+          return e.completed === false
+      }
+    })
+    updateTodoList(tmpArr)
+  }
+
   return (
     <>
       <h1 className="text-2xl font-semibold mb-4">Wow Todo List</h1>
@@ -180,8 +205,64 @@ export default function Home() {
           </button>
         </div>
       </div>
-      <div className="bg-white rounded-lg shadow p-4 mt-5">
-        <ul className="space-y-2">{todoList}</ul>
+      <div className="flex flex-col bg-white rounded-lg shadow p-4 mt-5">
+        <div className="flex flex-row justify-end">
+          <div className="flex flex-row justify-between gap-1 rounded-lg bg-slate-100 p-2 shadow">
+            <span>Filter : </span>
+            <div className="flex items-center">
+              <label
+                htmlFor="filterAll"
+                className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              >
+                All
+              </label>
+              <input
+                className="w-4 h-4 ml-1 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                type="radio"
+                value="all"
+                id="filterAll"
+                name="filter"
+                checked={whatIsChecked == 1}
+                onChange={handleFilter}
+              />
+            </div>
+            <div className="flex items-center">
+              <label
+                htmlFor="filterCompleted"
+                className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              >
+                Completed
+              </label>
+              <input
+                className="w-4 h-4 ml-1 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                type="radio"
+                value="completed"
+                id="filterCompleted"
+                name="filter"
+                checked={whatIsChecked == 2}
+                onChange={handleFilter}
+              />
+            </div>
+            <div className="flex items-center">
+              <label
+                htmlFor="filterPending"
+                className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              >
+                Pending
+              </label>
+              <input
+                className="w-4 h-4 ml-1 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                type="radio"
+                value="pending"
+                id="filterPending"
+                name="filter"
+                checked={whatIsChecked == 3}
+                onChange={handleFilter}
+              />
+            </div>
+          </div>
+        </div>
+        <ul className="my-2 space-y-2">{todoList}</ul>
       </div>
     </>
   )
